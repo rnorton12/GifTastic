@@ -1,54 +1,40 @@
-$(document).ready(function () {
-    var animalArray = ["dog", "cat", "rabbit", "chicken", "bird", "sugar glider", "frog"];
+<!DOCTYPE html>
+<html lang="en">
 
-    function renderButtons() {
-        $("#buttons").empty();
-
-        for (var i = 0; i < animalArray.length; i++) {
-            // This code $("<button>") is all jQuery needs to create the beginning and end tag. (<button></button>)
-            var button = $("<button>");
-            // Adding a class of movie to our button
-            button.addClass("animal");
-            // Adding a data-attribute
-            button.attr("data-name", animalArray[i]);
-            // Providing the initial button text
-            button.text(animalArray[i]);
-            // Adding the button to the buttons div
-            $("#buttons").append(button);
-        }
+<head>
+  <meta charset="utf-8">
+  <title>Favorite Movies</title>
+  <style type="text/css">
+    button,
+    div,
+    form,
+    input {
+      margin: 10px;
     }
+  </style>
+</head>
 
-    function testData() {
-        var API_KEY = "X1V2BUS0MZ6grwEYwEVTno1za1ICpU2N";
-        var queryURL = "http://api.giphy.com/v1/gifs/search?q=ryan+gosling&api_key=" + API_KEY + "&limit=10";
-        console.log(queryURL);
-        var response = undefined;
-        $.ajax({
-            url: queryURL,
-            method: "GET"
-        }).done(function (response) {
-            console.log(response);
-            for (var i = 0; i < response.data.length; i++) {
-                image = $("<img>");
-                image.attr("src", response.data[i].images.downsized.url);
-                image.attr("width", response.data[i].images.downsized.width);
-                image.attr("height", response.data[i].images.downsized.height);
-                $("#gifs").append(image);
-            }
-        });
-    }
+<body>
 
-    //testData();
-    renderButtons();
+  <div class="container">
+    <h1>Movie Search</h1>
 
-    // Adding a click event listener to all elements with a class of "movie"
-    $(document).on("click", ".animal", testData);
+    <!-- Movies will Get Dumped Dere -->
+    <div id="movies-view"></div>
 
-});
+    <!-- Rendered Buttons will get Dumped Here  -->
+    <div id="buttons-view"></div>
 
-/*
+    <form id="movie-form">
+      <label for="movie-input">Add a Movie Bro</label>
+      <input type="text" id="movie-input"><br>
 
-<script type="text/javascript">
+      <!-- Button triggers new movie to be added -->
+      <input id="add-movie" type="submit" value="Add a Movie Bro">
+    </form>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript">
       // Initial array of movies
       var movies = ["The Matrix", "The Notebook", "Mr. Nobody", "The Lion King"];
 
@@ -152,5 +138,7 @@ $(document).ready(function () {
       // Calling the renderButtons function to display the intial buttons
       renderButtons();
     </script>
+  </div>
+</body>
 
-    */
+</html>
