@@ -1,156 +1,182 @@
 $(document).ready(function () {
-    var animalArray = ["dog", "cat", "rabbit", "chicken", "bird", "sugar glider", "frog"];
 
-    function renderButtons() {
-        $("#buttons").empty();
-
-        for (var i = 0; i < animalArray.length; i++) {
-            // This code $("<button>") is all jQuery needs to create the beginning and end tag. (<button></button>)
-            var button = $("<button>");
-            // Adding a class of movie to our button
-            button.addClass("animal");
-            // Adding a data-attribute
-            button.attr("data-name", animalArray[i]);
-            // Providing the initial button text
-            button.text(animalArray[i]);
-            // Adding the button to the buttons div
-            $("#buttons").append(button);
-        }
+    var animalTypeArray = ["dog", "cat", "rabbit", "chicken", "bird", "sugar glider", "frog"];
+    var animalObjectArray = [];
+    var GIFSTATE = ["still", "animated"];
+    var API_KEY = "X1V2BUS0MZ6grwEYwEVTno1za1ICpU2N";
+    var currentSearchTerm = "";
+    var LIMIT = 10;
+    var increment = 0;
+    
+    function removeButtons() {
+        $(".animal").remove();
     }
 
-    function testData() {
-        var API_KEY = "X1V2BUS0MZ6grwEYwEVTno1za1ICpU2N";
-        var queryURL = "http://api.giphy.com/v1/gifs/search?q=ryan+gosling&api_key=" + API_KEY + "&limit=10";
-        console.log(queryURL);
-        var response = undefined;
+    function removeGifs() {
+        // remove any previous gifs displayed
+        $(".button-image").remove();
+    }
+    function queryGifs(searchTerm, api_key, offset) {
+        var queryURL = "http://api.giphy.com/v1/gifs/search?q=" + searchTerm + "&api_key=" + api_key + "&limit=10&offset=" + offset;
         $.ajax({
             url: queryURL,
             method: "GET"
         }).done(function (response) {
+
+
+            // reset the object array
+            animalObjectArray = [];
+
             console.log(response);
             for (var i = 0; i < response.data.length; i++) {
-                image = $("<img>");
-                image.attr("src", response.data[i].images.downsized.url);
-                image.attr("width", response.data[i].images.downsized.width);
-                image.attr("height", response.data[i].images.downsized.height);
-                $("#gifs").append(image);
-            }
+                var gifObject = {
+                    type: "",
+                    picture: "",
+                    gif: "",
+                    title: "",
+                    rating: "",
+                    state: "" // still
+                };
+                gifObject.picture = response.data[i].images.fixed_width_still.url;
+                gifObject.gif = response.data[i].images.fixed_width_small.url;
+                gifObject.title = response.data[i].title;
+                gifObject.rating = response.data[i].rating;
+                gifObject.state = GIFSTATE[0];
+
+                animalObjectArray.push(gifObject);
+                displayGifs(i);
+            } // end for loop
+            increment++;
         });
     }
 
-    //testData();
+    function renderButtons() {
+        //removeGifs();
+
+        for (var i = 0; i < animalTypeArray.length; i++) {
+            // This code $("<button>") is all jQuery needs to create the beginning and end tag. (<button></button>)
+            var $button = $("<button>");
+            // Adding a class of movie to our button
+            $button.addClass("animal");
+            // Adding a data-attribute
+            $button.attr("data-name", animalTypeArray[i]);
+            // Providing the initial button text
+            $button.text(animalTypeArray[i]);
+            // Adding the button to the buttons div
+            $("#buttons").append($button);
+        }
+    }
+
+    function displayGifs(index) {
+        // Create a new button element
+        var $btn = $("<button>"); //Equivalent: $(document.createElement('button'))
+        $btn.attr("id", "button-" + index); // set the button id
+        $btn.addClass("button-image"); // set the class
+        $btn.attr("type", "button"); // set the bootstrap "type" attribute
+
+        // add a figure to the button element.
+        // the figure will contain the character's image
+        var $figure = $("<figure>");
+        $figure.attr("id", "figure-" + index);
+        $figure.addClass("figure");
+
+        // add a caption to the top of the character image.
+        // the top caption will contain the name of the character
+        var $figCaptionTop = $("<figcaption>");
+        $figCaptionTop.addClass("figure-caption"); // set the class
+        $figCaptionTop.text("Rated: " + animalObjectArray[index].rating);
+
+        // add a caption to the bottom of the character image.
+        // the bottom caption will contain the characters starting health points
+        var $figCaptionBottom = $("<figcaption>");
+        $figCaptionBottom.addClass("figure-caption");
+//        $figCaptionBottom.text(animalObjectArray[index].title);
+        $figCaptionBottom.text("");
+
+        // Add an image to the button element
+        var $image = $("<img>");
+        $image.addClass("myImage");
+        $image.attr("id", "img-" + index);
+        $image.attr("src", animalObjectArray[index].picture);
+        $image.attr("value", index);
+
+        //               $image.attr("width", response.data[i].images.original_still.width);
+        $image.attr("width", "100");
+        //               $image.attr("height", response.data[i].images.original_still.height);
+        $image.attr("height", "100");
+
+        $("#gifs").append($btn);
+        $("#button-" + index).append($figCaptionTop);
+        $("#button-" + index).append($figure);
+        $("#button-" + index).append($image);
+        $("#button-" + index).append($figCaptionBottom);
+    }
+
+    function animateGif(id, index) {
+        console.log("animateGif");
+        
+        var imageSrc = "";
+
+        if (animalObjectArray[index].state === GIFSTATE[0]) { // still
+            // switch to animated image
+            imageSrc = animalObjectArray[index].gif;
+
+            // update the state
+            animalObjectArray[index].state = GIFSTATE[1];
+
+        } else { // animated
+            // switch to still image
+            imageSrc = animalObjectArray[index].picture;
+
+            // update the state
+            animalObjectArray[index].state = GIFSTATE[0];
+        }
+        // update the image src attribute
+        $("#" + id).attr("src", imageSrc);
+    }
+
+    function getMoreGifs(searchTerm) {
+        removeGifs();
+        
+            offset = increment * LIMIT;
+            increment++;
+        
+        
+        queryGifs(searchTerm, API_KEY, offset);
+
+    }
+
     renderButtons();
 
     // Adding a click event listener to all elements with a class of "movie"
-    $(document).on("click", ".animal", testData);
+    $(document).on("click", ".animal", function () {
+        currentSearchTerm = $(this).attr("data-name");
+        offset = 0;
+        increment = 0;
+        removeGifs();
+
+        queryGifs(currentSearchTerm, API_KEY, offset);
+    });
+
+    $(document).on("click", ".myImage", function () {
+        var gifId = $(this).attr("id");
+        var gifValue = $(this).attr("value");
+
+        console.log("gidId = " + gifId);
+        console.log("gifValue = " + gifValue);
+        animateGif(gifId, gifValue);
+    });
+
+    $(document).on("click", ".moreGifs", function () {
+        getMoreGifs(currentSearchTerm);
+    });
+
+    $("#user-input").on("click", function () {
+        removeGifs();
+        removeButtons();
+        console.log($(this).val());
+        animalTypeArray.push($(this).val());
+        renderButtons();
+    });
 
 });
-
-/*
-
-<script type="text/javascript">
-      // Initial array of movies
-      var movies = ["The Matrix", "The Notebook", "Mr. Nobody", "The Lion King"];
-
-      // displayMovieInfo function re-renders the HTML to display the appropriate content
-      function displayMovieInfo() {
-
-        var movie = $(this).attr("data-name");
-        var queryURL = "https://www.omdbapi.com/?t=" + movie + "&y=&plot=short&apikey=trilogy";
-
-        // Creating an AJAX call for the specific movie button being clicked
-        $.ajax({
-          url: queryURL,
-          method: "GET"
-        }).done(function(response) {
-
-          // Creating a div to hold the movie
-          var movieDiv = $("<div class='movie'>");
-
-          // Storing the rating data
-          var rating = response.Rated;
-
-          // Creating an element to have the rating displayed
-          var pOne = $("<p>").text("Rating: " + rating);
-
-          // Displaying the rating
-          movieDiv.append(pOne);
-
-          // Storing the release year
-          var released = response.Released;
-
-          // Creating an element to hold the release year
-          var pTwo = $("<p>").text("Released: " + released);
-
-          // Displaying the release year
-          movieDiv.append(pTwo);
-
-          // Storing the plot
-          var plot = response.Plot;
-
-          // Creating an element to hold the plot
-          var pThree = $("<p>").text("Plot: " + plot);
-
-          // Appending the plot
-          movieDiv.append(pThree);
-
-          // Retrieving the URL for the image
-          var imgURL = response.Poster;
-
-          // Creating an element to hold the image
-          var image = $("<img>").attr("src", imgURL);
-
-          // Appending the image
-          movieDiv.append(image);
-
-          // Putting the entire movie above the previous movies
-          $("#movies-view").prepend(movieDiv);
-        });
-
-      }
-
-      // Function for displaying movie data
-      function renderButtons() {
-
-        // Deleting the movies prior to adding new movies
-        // (this is necessary otherwise you will have repeat buttons)
-        $("#buttons-view").empty();
-
-        // Looping through the array of movies
-        for (var i = 0; i < movies.length; i++) {
-
-          // Then dynamicaly generating buttons for each movie in the array
-          // This code $("<button>") is all jQuery needs to create the beginning and end tag. (<button></button>)
-          var a = $("<button>");
-          // Adding a class of movie to our button
-          a.addClass("movie");
-          // Adding a data-attribute
-          a.attr("data-name", movies[i]);
-          // Providing the initial button text
-          a.text(movies[i]);
-          // Adding the button to the buttons-view div
-          $("#buttons-view").append(a);
-        }
-      }
-
-      // This function handles events where a movie button is clicked
-      $("#add-movie").on("click", function(event) {
-        event.preventDefault();
-        // This line grabs the input from the textbox
-        var movie = $("#movie-input").val().trim();
-
-        // Adding movie from the textbox to our array
-        movies.push(movie);
-
-        // Calling renderButtons which handles the processing of our movie array
-        renderButtons();
-      });
-
-      // Adding a click event listener to all elements with a class of "movie"
-      $(document).on("click", ".movie", displayMovieInfo);
-
-      // Calling the renderButtons function to display the intial buttons
-      renderButtons();
-    </script>
-
-    */
