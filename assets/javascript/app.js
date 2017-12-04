@@ -67,8 +67,8 @@ $(document).ready(function () {
             var letterObject = {
                 letter: headingCharacters[i],
                 image: "",
-                width: "50px",
-                height: "50px"
+                width: "65px",
+                height: "65px"
             };
 
             if (headingCharacters[i].toUpperCase() === "A") {
@@ -141,12 +141,13 @@ $(document).ready(function () {
     function renderButtons() {
         hideBackButton();
         hideNextButton();
+        $("#main-gif-row").hide();
 
         for (var i = 0; i < animalTypeArray.length; i++) {
             // This code $("<button>") is all jQuery needs to create the beginning and end tag. (<button></button>)
             var $button = $("<button>");
             // Adding a class of movie to our button
-            $button.addClass("animal");
+            $button.addClass("btn btn-primary animal mx-1");
             // Adding a data-attribute
             $button.attr("data-name", animalTypeArray[i]);
             // Providing the initial button text
@@ -188,11 +189,8 @@ $(document).ready(function () {
         $image.attr("id", "img-" + index);
         $image.attr("src", animalObjectArray[index].picture);
         $image.attr("value", index);
-
-        //               $image.attr("width", response.data[i].images.original_still.width);
-        $image.attr("width", "100");
-        //               $image.attr("height", response.data[i].images.original_still.height);
-        $image.attr("height", "100");
+        $image.attr("width", "125");
+        $image.attr("height", "125");
 
         $("#gifs").append($btn);
         $("#button-" + index).append($figCaptionTop);
@@ -260,7 +258,7 @@ $(document).ready(function () {
     displayHeading();
     renderButtons();
 
-    // Adding a click event listener to all elements with a class of "movie"
+    // Adding a click event listener to all elements with a class of "animal"
     $(document).on("click", ".animal", function () {
         var searchTerm = $(this).attr("data-name");
         var apiKey = gifApiObject.apiKey;
@@ -287,6 +285,13 @@ $(document).ready(function () {
         animateGif(gifId, gifValue);
     });
 
+    $(".myImage").mouseenter(function () {
+        var gifId = $(this).attr("id");
+        console.log(mouse);
+        $("#main-gif-row").show();
+        $(gifId).clone().appendTo("#main-gif-image");
+    });
+
     $(document).on("click", "#back-button", function () {
         var searchTerm = gifApiObject.searchTerm;
         getMoreGifsBack(searchTerm);
@@ -300,11 +305,14 @@ $(document).ready(function () {
     $("#submit").on("click", function (event) {
         event.preventDefault();
         var newItem = $("#new-item").val().trim();
-        console.log(newItem);
-        removeGifs();
-        removeButtons();
-        animalTypeArray.push(newItem);
-        renderButtons();
+
+        if (newItem.length) {
+            console.log(newItem);
+            removeGifs();
+            removeButtons();
+            animalTypeArray.push(newItem);
+            renderButtons();
+        }
     });
 
 });

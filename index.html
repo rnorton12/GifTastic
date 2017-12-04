@@ -8,25 +8,61 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb"
         crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="./assets/css/style.css" />
 </head>
 
 <body>
     <div class="wrapper">
         <div class="container-fluid">
-            <span id="heading"></span>
-            <div id="buttons"></div>
+            <div class="row my-5">
+                <div class="col-md-12 text-center">
+                    <span id="heading"></span>
+                </div>
+            </div>
 
-            <form id="input-form">
-                <span>Enter an animal:
-                    <input id="new-item" type="text">
-                    <input id="submit" value="submit" type="submit">
-                </span>
+            <div class "row id=main-gif-row">
+                <div class="col-md-12 text-left">
+                    <div id="main-gif-image"></div>
+                </div>
+            </div>
+
+            <div class="row mb-5">
+                <div class="col-md-12 text-left">
+                    <div id="buttons"></div>
+                </div>
+            </div>
+
+            <form>
+                <div class="form-row align-items-left">
+                    <div class="col-sm-3">
+                        <label class="sr-only" for="new-item">Enter a search term</label>
+                        <input type="text" class="form-control mb-2 mb-sm-0" id="new-item" placeholder="">
+                    </div>
+                    <div class="col-auto">
+                        <button id="submit" type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </div>
             </form>
 
-            <div id="gifs">
-                <button class="back" id="back-button" type="button">Back</button>
-                <button class="next" id="next-button" type="button">Next</button>
-                <br>
+            <div class="row my-5">
+                <div class="col-md-12 text-left">
+                    <button class="btn btn-dark back" id="back-button" type="button">Back</button>
+                    <button class="btn btn-dark next" id="next-button" type="button">Next</button>
+                </div>
+            </div>
+
+            <div class="row mb-5">
+                <div class="col-md-1"></div>
+                <div class="col-md-10 text-center">
+                    <div id="gifs"></div>
+                </div>
+                <div class="col-md-1"></div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12 footer bg-muted text-center text-muted">
+                    <span>© 2017: Roy Norton</span>
+                </div>
             </div>
         </div>
     </div>
