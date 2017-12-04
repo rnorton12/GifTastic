@@ -3,26 +3,36 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title></title>
+    <title>Roy Norton: GifTastic</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb"
+        crossorigin="anonymous">
 </head>
 
 <body>
-   <div id="buttons"></div>
+    <div class="wrapper">
+        <div class="container-fluid">
+            <span id="heading"></span>
+            <div id="buttons"></div>
 
-   <form id="input-form">
-       <label for="user-input">Add and animal</label>
-       <input type="text" id="user-input"><br>
-       <input id="add-item" type="submit" value="submit">
-   </form>
+            <form id="input-form">
+                <span>Enter an animal:
+                    <input id="new-item" type="text">
+                    <input id="submit" value="submit" type="submit">
+                </span>
+            </form>
 
-   <div id="gifs">
-       <button class="moreGifs" type="button">Get More Gifs</button><br>
-   </div>
+            <div id="gifs">
+                <button class="back" id="back-button" type="button">Back</button>
+                <button class="next" id="next-button" type="button">Next</button>
+                <br>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="./assets/javascript/app.js"></script>
 
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-   <script src="./assets/javascript/app.js"></script>
 </body>
 
 </html>
