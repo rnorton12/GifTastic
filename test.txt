@@ -1,6 +1,0 @@
-var YOUR_API_KEY = "X1V2BUS0MZ6grwEYwEVTno1za1ICpU2N";
-
-var xhr = $.get("http://api.giphy.com/v1/gifs/search?q=ryan+gosling&api_key=X1V2BUS0MZ6grwEYwEVTno1za1ICpU2N&limit=5");
-xhr.done(function(data) { console.log("success got data", data); });
-
-https://api.giphy.com/v1/gifs/search?q=bigfoot&api_key=X1V2BUS0MZ6grwEYwEVTno1za1ICpU2N&limit=5
