@@ -150,6 +150,11 @@ $(document).ready(function () {
                         width: "",
                         height: ""
                     },
+                    original: { // orignal size of the animated gif
+                        url: "",
+                        width: "",
+                        height: ""
+                    },
                     rating: "",
                     state: "" // will track the state of image (still or animated)
                 };
@@ -163,6 +168,10 @@ $(document).ready(function () {
                 gifObject.gif.url = response.data[i].images.fixed_width_small.url;
                 gifObject.gif.width = response.data[i].images.fixed_width_small.width;
                 gifObject.gif.height = response.data[i].images.fixed_width_small.height;
+
+                gifObject.original.url = response.data[i].images.original.url;
+                gifObject.original.width = response.data[i].images.original.width;
+                gifObject.original.height = response.data[i].images.original.height;
 
                 gifObject.rating = response.data[i].rating.toUpperCase();
                 gifObject.state = gifApiObject.gifState.still;
@@ -207,6 +216,7 @@ $(document).ready(function () {
         $btn.attr("id", "button-" + index); // set the button id
         $btn.addClass("btn btn-light button-image m-1"); // set the class
         $btn.attr("type", "button"); // set the bootstrap "type" attribute
+        $btn.attr("value", index);
 
         // add a figure to the button element.
         // the figure will contain the character's image
@@ -234,6 +244,17 @@ $(document).ready(function () {
         $image.attr("value", index);
         $image.attr("width", "125");
         $image.attr("height", "125");
+       // <button type="button" class="btn btn-primary expand" data-toggle="modal" data-target=".my-modal"></button>
+        
+        // add a button to the buttom of the image
+        var $expand = $("<button>");
+         $expand.addClass("btn btn-primary btn-sm expand my-1");
+         $expand.attr("id", "expand-" + index);
+         $expand.attr("type", "button");
+         $expand.attr("value", index);
+         $expand.attr("data-toggle", "modal");
+         $expand.attr("data-target", ".my-modal");
+         $expand.text("Expand");
 
         $("#gifs").append($btn);
 
@@ -242,9 +263,10 @@ $(document).ready(function () {
         $(elementId).append($figure);
         $(elementId).append($image);
         $(elementId).append($figCaptionBottom);
+        $(elementId).append($expand);
     }
 
-    function animateGif(id, index) {
+    function animateGif(index) {
         console.log("animateGif");
 
         var imageSrc = "";
@@ -264,7 +286,7 @@ $(document).ready(function () {
             animalObjectArray[index].state = gifApiObject.gifState.still;
         }
         // update the image src attribute
-        $("#" + id).attr("src", imageSrc);
+        $("#img-" + index).attr("src", imageSrc);
     }
 
     function getMoreGifsBack() {
@@ -291,10 +313,10 @@ $(document).ready(function () {
         var limit = gifApiObject.resultsLimit;
         var offset = gifApiObject.resultsOffset;
 
-  //      offset += limit;
- //       gifApiObject.resultsOffset = offset;
+        //      offset += limit;
+        //       gifApiObject.resultsOffset = offset;
 
- //       console.log("next-offset: " + offset);
+        //       console.log("next-offset: " + offset);
         removeGifs();
         queryGifs(searchTerm, apiKey, limit, offset);
         enableBackButton();
@@ -321,13 +343,11 @@ $(document).ready(function () {
         queryGifs(searchTerm, apiKey, limit, offset);
     });
 
-    $(document).on("click", ".myImage", function () {
-        var gifId = $(this).attr("id");
+    $(document).on("click", ".button-image", ".myImage", function () {
         var gifValue = $(this).attr("value");
 
-        console.log("gidId = " + gifId);
         console.log("gifValue = " + gifValue);
-        animateGif(gifId, gifValue);
+        animateGif(gifValue);
     });
 
     $(document).on("click", "#back-button", function () {
@@ -350,5 +370,19 @@ $(document).ready(function () {
             renderButtons();
         }
     });
-　
+
+    $(document).on("click", ".expand", function () {
+        var index = $(this).attr("value");
+        console.log("index = " + index);
+
+        var $image = $("<img>");
+        $image.addClass("myImage");
+        $image.attr("id", "img-" + index);
+        $image.attr("src", animalObjectArray[index].original.url);
+        $image.attr("value", index);
+        $image.attr("width", animalObjectArray[index].original.width);
+        $image.attr("height", animalObjectArray[index].original.height);
+
+        $(".modal-content").append($image);
+    });
 });
