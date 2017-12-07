@@ -246,14 +246,14 @@ $(document).ready(function () {
         $image.attr("height", "125");
        // <button type="button" class="btn btn-primary expand" data-toggle="modal" data-target=".my-modal"></button>
         
-        // add a button to the buttom of the image
+        // add a button to the bottom of the image
         var $expand = $("<button>");
          $expand.addClass("btn btn-primary btn-sm expand my-1");
          $expand.attr("id", "expand-" + index);
          $expand.attr("type", "button");
          $expand.attr("value", index);
          $expand.attr("data-toggle", "modal");
-         $expand.attr("data-target", ".my-modal");
+         $expand.attr("data-target", "#my-modal");
          $expand.text("Expand");
 
         $("#gifs").append($btn);
@@ -376,13 +376,18 @@ $(document).ready(function () {
         console.log("index = " + index);
 
         var $image = $("<img>");
-        $image.addClass("myImage");
+        $image.addClass("img-fluid myImage");
         $image.attr("id", "img-" + index);
         $image.attr("src", animalObjectArray[index].original.url);
         $image.attr("value", index);
         $image.attr("width", animalObjectArray[index].original.width);
         $image.attr("height", animalObjectArray[index].original.height);
 
-        $(".modal-content").append($image);
+        $(".expanded-gif").append($image);
+        $(".modal-title").text(animalObjectArray[index].title);
+    });
+
+    $(document).on("click", ".close-modal", function () {
+        $(".expanded-gif").empty();
     });
 });
