@@ -124,7 +124,7 @@ $(document).ready(function () {
 
     // make an API call to retrieve the gifs
     function queryGifs(searchTerm, api_key, limit, offset) {
-        var queryURL = "http://api.giphy.com/v1/gifs/search?q=" + searchTerm + "&api_key=" + api_key + "&limit=" + limit + "&offset=" + offset;
+        var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + searchTerm + "&api_key=" + api_key + "&limit=" + limit + "&offset=" + offset;
         console.log(queryURL);
         $.ajax({
             url: queryURL,
