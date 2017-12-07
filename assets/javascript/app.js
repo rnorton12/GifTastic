@@ -162,7 +162,7 @@ $(document).ready(function () {
                 // fill in the object with the data retrieve from the API query
                 gifObject.title = response.data[i].title;
                 gifObject.picture.url = response.data[i].images.fixed_width_still.url;
-                gifObject.picture.wdith = response.data[i].images.fixed_width_still.width;
+                gifObject.picture.width = response.data[i].images.fixed_width_still.width;
                 gifObject.picture.height = response.data[i].images.fixed_width_still.height;
 
                 gifObject.gif.url = response.data[i].images.fixed_width_small.url;
